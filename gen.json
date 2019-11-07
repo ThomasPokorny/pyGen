@@ -1,6 +1,12 @@
 {
-    "Transport" : {"abstract":true},
-    "Railbound" : {"extends":"Transport"},
+    "Transport" : 
+        {   "abstract":true,
+            "fields": [ {"name":"generatedBool", "t":"boolean", "gs":true},  {"name":"engine", "t":"Engine"},  {"name":"someMap", "t":"Map<String,Integer>"}   ] ,
+            "methods":[ {"name":"someGeneratedTestMethod", "return":"Long", "param":"ArrayList<Integer> ints, boolean isTrue"} ,
+                        {"name":"someAbstractTestMethod", "abstract":true, "return":"Long", "param":"ArrayList<Integer> ints, boolean isTrue"} 
+                        ] 
+        },
+    "Railbound" : {"extends":"Transport" , "fields": [  {"name":"someInt", "t":"Integer"}   ] },
     "OffTrack" : {"extends":"Transport"},
     "Tram" : {"extends":"Railbound", "implements":"Gridbound"},
     "RailWay" : {"extends":"Railbound"},
@@ -8,7 +14,10 @@
     "Bus" : {"extends":"Transport"},
     "IntercityBus" : {"extends":"Transport"},
     "Gridbound" : {"interface":true},
-    "Engine" : {"interface":true},
+    "Engine" : 
+        {   "interface":true, 
+            "methods":[ {"name":"range", "return":"int"} ]
+        },
     "CombustionEngine" : {"implements":"Engine"} ,
     "Electrified" : {"implements":"Engine"} 
 }

@@ -65,7 +65,7 @@ public abstract class Transport
 	}
 
 	public void setGeneratedbool(boolean generatedBool){
-		this.generatedBool = generatedBool
+		this.generatedBool = generatedBool;
 	}
 }
 ```

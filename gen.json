@@ -1,0 +1,14 @@
+{
+    "Transport" : {"abstract":true},
+    "Railbound" : {"extends":"Transport"},
+    "OffTrack" : {"extends":"Transport"},
+    "Tram" : {"extends":"Railbound", "implements":"Gridbound"},
+    "RailWay" : {"extends":"Railbound"},
+    "Underground" : {"extends":"Railbound", "implements":"Gridbound"},
+    "Bus" : {"extends":"Transport"},
+    "IntercityBus" : {"extends":"Transport"},
+    "Gridbound" : {"interface":true},
+    "Engine" : {"interface":true},
+    "CombustionEngine" : {"implements":"Engine"} ,
+    "Electrified" : {"implements":"Engine"} 
+}

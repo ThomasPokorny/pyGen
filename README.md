@@ -38,7 +38,7 @@ When called with the following .json File
             "methods":[ {"name":"range", "return":"int"} ]
         },
 
-
+}
 ```
 
 The resulting Java Files look like this:

@@ -22,7 +22,10 @@ import sys
 import os
 
 versionString = "pyGen version: 1.0"
-helpString = "Calling Synopsis:\npyGen %path_to_json_file%"
+helpString = "Calling Synopsis:\npyGen [path_to_json_file] [-a author]"
+
+## calling arguments
+commandAuthor = "-a"
 
 #### SOME JAVA IDENTIFIERS
 
@@ -40,6 +43,9 @@ implH   = "implements"
 beginJ  = "{"
 endJ    = "}"
 
+# doxygen comment styling
+headerC         = "/**\n*\n* @author $a$\n*\n*/"
+headerBlankC    = "/**\n*\n*\n*/"
 
 def main():
 
@@ -53,6 +59,14 @@ def main():
     if args[1] == '-V':
         print(versionString)
         raise SystemExit
+    if args[1] == '-help':
+        print(helpString)
+        raise SystemExit
+
+    author = ""
+    if len(args) == 4 and args[2] == commandAuthor:
+        author = args[3]
+
     try:
         f = open(args[1], 'r')
         javaGen = json.load(f)
@@ -61,14 +75,14 @@ def main():
         keys = javaGen.keys()
         for c in keys:
             print(">> creating new Java Class: "+c+".java")
-            createClass(c, javaGen[c])
+            createClass(c, javaGen[c], author)
 
         f.close()
 
     except FileNotFoundError:
         print('The given file does not exist!')
 
-def createClass(className, values):
+def createClass(className, values, author):
     # creating the file
     javaFile = open(className+".java","w+")
 
@@ -80,6 +94,8 @@ def createClass(className, values):
     extendsC            = False
     implemntsC          = False
     isInterface         = False
+
+    classComment        = headerBlankC #default class comment
 
     if "private" in values and values["private"] is True:
         accessModifier = priJ
@@ -95,6 +111,9 @@ def createClass(className, values):
         implemntsC = True
         compisitionClass = values["implements"]
 
+    if author != "" :
+        classComment = headerC.replace("$a$", author)
+
     classString = accessModifier + abstract + " " + classIdentifier + " " + className 
     if extendsC is True:
         classString = classString + " " + extenJ + " " + inheritClass
@@ -102,6 +121,7 @@ def createClass(className, values):
         classString = classString + " " + implH + " " + compisitionClass
 
     ## WRTIE TO GENERATED FILE ##
+    javaFile.write(classComment+"\r\n") 
     javaFile.write(classString+"\r\n") 
 
     javaFile.write(beginJ+"\r\n")  
@@ -116,17 +136,18 @@ def createClass(className, values):
         for m in values["methods"]:
             createMethod(javaFile, m, isInterface)
 
-    # generating getters
-    if "fields" in values:
-        for a in values["fields"]:
-            if "g" in a or "gs" in a:
-                createGetter(javaFile, a)
 
     # generating setters
     if "fields" in values:
         for a in values["fields"]:
             if "s" in a or "gs" in a:
                 createSetter(javaFile, a)
+    
+     # generating getters
+    if "fields" in values:
+        for a in values["fields"]:
+            if "g" in a or "gs" in a:
+                createGetter(javaFile, a)
 
     javaFile.write(endJ+"\r\n")
 
@@ -210,7 +231,7 @@ def createSetter(javaFile, values):
         static = " " + statJ
 
     setterString = accessModifier + static + " " + returnValue + " "+  "set"+attributeName + "(" + attributeType + " " + values["name"] +")"
-    setString = "this." + values["name"] + " = "+values["name"] 
+    setString = "this." + values["name"] + " = "+values["name"] + ";"
 
     javaFile.write("\r\n")
     javaFile.write("\t" +setterString+ beginJ + "\r\n")

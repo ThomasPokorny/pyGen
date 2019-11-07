@@ -42,6 +42,8 @@ When called with the following .json File
 ```
 
 The resulting Java Files look like this:
+Note that import -, package - and method return statements are not generated yet!
+
 (Transport.java)
 ```java
 public abstract class Transport
@@ -79,7 +81,3 @@ public interface Engine
 	public int range();
 }
 ```
-
-Note that import and package statements are not generated yet!
-
-

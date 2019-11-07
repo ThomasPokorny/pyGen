@@ -12,3 +12,11 @@
 ```
 # pyGen 
 A lightweight Java Class generation Tool
+
+Calling Synopsis
+```
+python pyGen.py gen.json
+
+python pyGen.py  [json-file]
+
+```

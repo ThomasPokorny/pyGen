@@ -129,35 +129,35 @@ def createClass(className, values, author):
     # generating attributes
     if "fields" in values:
         for a in values["fields"]:
-            createAttribute(javaFile, a)
+            createAttribute(javaFile, a, values["fields"][a])
 
     # generating methods
     if "methods" in values:
-        for m in values["methods"]:
-            createMethod(javaFile, m, isInterface)
+        for m in values["methods"].keys():
+            createMethod(javaFile, m, values["methods"][m],isInterface)
 
 
     # generating setters
     if "fields" in values:
         for a in values["fields"]:
-            if "s" in a or "gs" in a:
-                createSetter(javaFile, a)
+            if "s" in values["fields"][a] or "gs" in values["fields"][a]:
+                createSetter(javaFile, a, values["fields"][a])
     
      # generating getters
     if "fields" in values:
         for a in values["fields"]:
-            if "g" in a or "gs" in a:
-                createGetter(javaFile, a)
+            if "g" in values["fields"][a] or "gs" in values["fields"][a]:
+                createGetter(javaFile, a, values["fields"][a])
 
     javaFile.write(endJ+"\r\n")
 
     javaFile.close() 
 
 
-def createAttribute(javaFile, values):
+def createAttribute(javaFile, attribute, values):
     accessModifier      = priJ # the default is private
     static              = ""
-    attributeName       = values["name"]
+    attributeName       = attribute
     attributeType       = values["t"]
 
     if "public" in values and values["public"] is True:
@@ -167,15 +167,15 @@ def createAttribute(javaFile, values):
 
     attributeString = accessModifier + static + " " + attributeType + " " + attributeName
 
-    javaFile.write("\r\n")
+    #javaFile.write("\r\n")
     javaFile.write("\t" + attributeString +";\r\n")
 
-def createMethod(javaFile, values, isInterface):
+def createMethod(javaFile, method, values, isInterface):
     accessModifier      = pubJ
     static              = ""
     returnType          = "void"
     params              = "()"
-    methodName          = values["name"]
+    methodName          = method
     abstract            = "" # per default the class is not abstract 
     isAbstract          = False
     
@@ -202,17 +202,17 @@ def createMethod(javaFile, values, isInterface):
     else:
         javaFile.write(";" + "\r\n")
     
-def createGetter(javaFile, values):
+def createGetter(javaFile, attribute, values):
     accessModifier      = pubJ
     static              = ""
-    attributeName       = values["name"].title()
+    attributeName       = attribute.title()
     attributeType       = values["t"]
 
     if "static" in values and values["static"] is True:
         static = " " + statJ
 
     getterString = accessModifier + static + " " + attributeType + " "+  "get"+attributeName+"()"
-    returnString = "return" + " " + values["name"]+";"
+    returnString = "return" + " " + attribute+";"
 
     javaFile.write("\r\n")
     javaFile.write("\t" +getterString+ beginJ + "\r\n")
@@ -220,18 +220,18 @@ def createGetter(javaFile, values):
     javaFile.write("\t" + endJ + "\r\n")
 
 
-def createSetter(javaFile, values):
+def createSetter(javaFile, attribute, values):
     accessModifier      = pubJ
     static              = ""
-    attributeName       = values["name"].title()
+    attributeName       = attribute.title()
     attributeType       = values["t"]
     returnValue         = "void"
 
     if "static" in values and values["static"] is True:
         static = " " + statJ
 
-    setterString = accessModifier + static + " " + returnValue + " "+  "set"+attributeName + "(" + attributeType + " " + values["name"] +")"
-    setString = "this." + values["name"] + " = "+values["name"] + ";"
+    setterString = accessModifier + static + " " + returnValue + " "+  "set"+attributeName + "(" + attributeType + " " + attribute +")"
+    setString = "this." + attribute + " = "+attribute + ";"
 
     javaFile.write("\r\n")
     javaFile.write("\t" +setterString+ beginJ + "\r\n")

@@ -107,6 +107,12 @@ def createClass(className, values, author):
     if "extends" in values:
         extendsC = True
         inheritClass = values["extends"]
+    if ":" in values:
+        extendsC = True
+        inheritClass = values[":"]
+    if "::" in values:
+        implemntsC = True
+        compisitionClass = values["::"]
     if "implements" in values:
         implemntsC = True
         compisitionClass = values["implements"]

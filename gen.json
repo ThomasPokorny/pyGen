@@ -6,18 +6,18 @@
                         "someAbstractTestMethod": { "abstract":true, "return":"Long", "param":"ArrayList<Integer> ints, boolean isTrue"} 
             } 
         },
-    "Railbound" : {"extends":"Transport" , "fields": { "someInt":{ "t":"Integer"}   } },
-    "OffTrack" : {"extends":"Transport"},
+    "Railbound" : {":":"Transport" , "fields": { "someInt":{ "t":"Integer"}   } },
+    "OffTrack" : {":":"Transport"},
     "Tram" : {"extends":"Railbound", "implements":"Gridbound"},
-    "RailWay" : {"extends":"Railbound"},
-    "Underground" : {"extends":"Railbound", "implements":"Gridbound"},
-    "Bus" : {"extends":"Transport"},
-    "IntercityBus" : {"extends":"Transport"},
+    "RailWay" : {":":"Railbound"},
+    "Underground" : {":":"Railbound", "implements":"Gridbound"},
+    "Bus" : {":":"Transport"},
+    "IntercityBus" : {":":"Transport"},
     "Gridbound" : {"interface":true},
     "Engine" : 
         {   "interface":true, 
             "methods":{ "range" :{ "return":"int"} }
         },
     "CombustionEngine" : {"implements":"Engine"} ,
-    "Electrified" : {"implements":"Engine"} 
+    "Electrified" : {"::":"Engine"} 
 }
